@@ -22,7 +22,6 @@ public class DemoLoginService {
     public void login(DemoLoginDto demoLoginDto) {
         Optional<DemoLogin> checkUserName = Optional.of(new DemoLogin());
         Optional<DemoLogin> checkPassword = Optional.of(new DemoLogin());
-        long count = 0;
 
         try {
             checkUserName = Optional.ofNullable(this.demoLoginRepository.checkUserName(demoLoginDto)
@@ -42,13 +41,12 @@ public class DemoLoginService {
 
         } catch (NotFoundException e) {
             if(e.getMessage().equals("password invalid")){
-                count = checkUserName.get().getCountLogin() + 1;
                 if(checkUserName.get().getCountLogin() == 3 ){
                     log.info("User Logged");
                     throw new NotFoundException(ErrorCode.ERR_NOT_FOUND.code, "User Logged");
                 }
                 log.info("updateCountLogin");
-                this.demoLoginRepository.updateCountLogin(demoLoginDto, count);
+                this.demoLoginRepository.updateCountLogin(demoLoginDto);
             }
 
             throw new NotFoundException(e.getMessage());

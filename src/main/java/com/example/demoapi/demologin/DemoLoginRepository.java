@@ -69,13 +69,12 @@ public class DemoLoginRepository {
         }
     }
 
-    public int updateCountLogin(DemoLoginDto demoLoginDto, Long count) {
-        String sql = "UPDATE DEMO_LOGIN SET count_login = :count" +
+    public int updateCountLogin(DemoLoginDto demoLoginDto) {
+        String sql = "UPDATE DEMO_LOGIN SET count_login = count_login + 1" +
                 " WHERE user_name = :username";
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("username", demoLoginDto.getUserName());
-        param.addValue("count", count);
 
         return this.namedParameterJdbcTemplate.update(sql, param);
     }
