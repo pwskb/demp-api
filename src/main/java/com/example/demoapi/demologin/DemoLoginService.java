@@ -18,7 +18,7 @@ public class DemoLoginService {
     private final DemoLoginRepository demoLoginRepository;
     private final ModelMapper modelMapper;
 
-    @Transactional
+//    @Transactional
     public void login(DemoLoginDto demoLoginDto) {
         Optional<DemoLogin> checkUserName = Optional.of(new DemoLogin());
         Optional<DemoLogin> checkPassword = Optional.of(new DemoLogin());
@@ -34,6 +34,10 @@ public class DemoLoginService {
             if(checkUserName.get().getCountLogin() != 3 && checkPassword.isPresent()){
                 this.demoLoginRepository.loginSuccess(demoLoginDto);
                 log.info("login success");
+            }
+
+            if(checkUserName.get().getCountLogin() == 3 ){
+                throw new NotFoundException(ErrorCode.ERR_NOT_FOUND.code, "User Logged");
             }
 
         } catch (NotFoundException e) {
